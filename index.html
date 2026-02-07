@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Rose Day 🌹</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    height:100vh;
+    background:
+      radial-gradient(circle at 20% 20%, #ffffff33 1px, transparent 1px),
+      radial-gradient(circle at 80% 30%, #ffffff22 1px, transparent 1px),
+      radial-gradient(circle at 50% 70%, #ffffff33 1px, transparent 1px),
+      linear-gradient(to bottom, #0b1026, #02030f);
+    background-size:200px 200px, 250px 250px, 180px 180px, cover;
+    overflow:hidden;
+}
+
+/* Hint */
+.hint{
+    position:fixed;
+    top:15px;
+    width:100%;
+    text-align:center;
+    font-size:1.5em;
+    color:#ffd1e8;
+    text-shadow:0 0 12px #ff69b4;
+    z-index:10;
+}
+
+/* Center message */
+.center-message{
+    position:absolute;
+    top:30%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(18px);
+    padding:26px 30px;
+    border-radius:28px;
+    color:#ffe3f2;
+    font-size:1.25em;
+    line-height:1.6;
+    max-width:85%;
+    animation:softGlow 3s infinite alternate;
+    z-index:8;
+}
+
+@keyframes softGlow{
+    from{box-shadow:0 0 20px rgba(255,182,213,0.3);}
+    to{box-shadow:0 0 40px rgba(255,105,180,0.6);}
+}
+
+/* ===== PHOTO STORY ===== */
+.photos{
+    position:absolute;
+    bottom:90px;
+    width:100%;
+    height:220px;
+    z-index:6;
+}
+
+.photo{
+    position:absolute;
+    width:150px;
+    height:200px;
+    border-radius:18px;
+    object-fit:cover;
+    border:4px solid rgba(255,255,255,0.8);
+    box-shadow:0 0 25px rgba(255,105,180,0.6);
+    transition:all 3s ease;
+    opacity:1;
+}
+
+#me{ left:8%; }
+#her{ right:8%; }
+
+/* Move closer */
+.photos.move #me{ left:42%; }
+.photos.move #her{ right:42%; }
+
+/* Fade out */
+.photos.hide .photo{
+    opacity:0;
+    transform:scale(0.8);
+}
+
+/* Together photo */
+.together{
+    position:absolute;
+    bottom:90px;
+    left:50%;
+    transform:translateX(-50%) scale(0.6);
+    width:200px;
+    height:250px;
+    border-radius:22px;
+    object-fit:cover;
+    border:5px solid white;
+    box-shadow:0 0 40px rgba(255,105,180,0.9);
+    opacity:0;
+    animation:showTogether 2s ease forwards;
+    animation-delay:6.5s;
+    z-index:7;
+}
+
+@keyframes showTogether{
+    to{
+        opacity:1;
+        transform:translateX(-50%) scale(1);
+    }
+}
+
+/* Floating roses */
+.rose{
+    position:absolute;
+    font-size:3rem;
+    cursor:pointer;
+    animation:float 6s ease-in-out infinite;
+    z-index:5;
+}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-40px);}
+    100%{transform:translateY(0);}
+}
+
+/* Message box */
+#messageBox{
+    position:fixed;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(15px);
+    padding:16px 22px;
+    border-radius:20px;
+    color:#ffe6f3;
+    font-size:1.1em;
+    text-align:center;
+    display:none;
+    z-index:20;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hint">Tap the Roses 🌹</div>
+
+<div class="center-message">
+    Happy Rose Day 🌹<br><br>
+    Just like roses add beauty to the world,<br>
+    <b>you add meaning to my life</b> 💖<br><br>
+    Tap the roses around you<br>
+    and discover what my heart wants to say ✨
+</div>
+
+<!-- PHOTO STORY -->
+<div class="photos" id="photoStory">
+    <img src="me.jpg" class="photo" id="me">
+    <img src="her.jpg" class="photo" id="her">
+</div>
+
+<!-- TOGETHER PHOTO -->
+<img src="together.jpg" class="together">
+
+<div id="messageBox"></div>
+
+<script>
+const lines=[
+    "Even under the stars, my heart finds you ✨",
+    "Every rose leads me back to you 🌹",
+    "Some stories are meant to become one 💖",
+    "Two paths, one destiny ✨",
+    "This night feels complete with you 🌙"
+];
+
+const box=document.getElementById("messageBox");
+let typingInterval=null;
+
+function typeText(text){
+    if(typingInterval) clearInterval(typingInterval);
+    box.style.display="block";
+    box.innerHTML="";
+    let i=0;
+    typingInterval=setInterval(()=>{
+        box.innerHTML+=text.charAt(i);
+        i++;
+        if(i>=text.length){
+            clearInterval(typingInterval);
+            typingInterval=null;
+        }
+    },40);
+}
+
+/* Floating roses */
+for(let i=0;i<12;i++){
+    const rose=document.createElement("div");
+    rose.className="rose";
+    rose.textContent="🌹";
+    rose.style.left=Math.random()*90+"vw";
+    rose.style.top=Math.random()*70+"vh";
+    rose.onclick=()=>typeText(lines[Math.floor(Math.random()*lines.length)]);
+    document.body.appendChild(rose);
+}
+
+/* PHOTO STORY TIMING */
+const photos=document.getElementById("photoStory");
+setTimeout(()=>photos.classList.add("move"),1000);
+setTimeout(()=>photos.classList.add("hide"),4500);
+</script>
+
+</body>
+</html>
